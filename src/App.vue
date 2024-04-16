@@ -1,8 +1,5 @@
 <template>
   <div id="app">
-    <header>
-      <!-- Header atau Navbar -->
-    </header>
 
     <!-- Bagian utama konten halaman -->
     <main>

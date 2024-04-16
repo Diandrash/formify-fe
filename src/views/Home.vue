@@ -4,11 +4,18 @@
       <div class="w-full pt-10 px-4 sm:px-6 md:px-8 lg:ps-72">
         <div class="flex justify-between mb-4">
           <h1 class="font-semibold text-2xl">All Created Forms</h1>
-          <button type="button" class="py-2 self-center px-5 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" data-hs-overlay="#hs-focus-management-modal">
-        New Form
-      </button>
+          <div class="group flex gap-3">
+            <button type="button" class="py-3 px-4 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-yellow-400 text-black hover:bg-yellow-600 disabled:opacity-50 disabled:pointer-events-none" data-hs-overlay="#hs-vertically-centered-modal">
+              Make Response Form
+            </button>
 
-        <div id="hs-focus-management-modal" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none">
+            <button type="button" class="py-2 self-center px-5 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none" data-hs-overlay="#hs-focus-management-modal">
+              New Form
+            </button>
+          </div>
+          
+
+          <div id="hs-focus-management-modal" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none">
           <div class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto">
             <div class="flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto :bg-gray-800 :border-gray-700 :shadow-slate-700/[.7]">
               <div class="flex justify-between items-center py-3 px-4 border-b :border-gray-700">
@@ -53,7 +60,40 @@
               </form>
             </div>
           </div>
-        </div>
+          </div>
+          
+          <div id="hs-vertically-centered-modal" class="hs-overlay hidden size-full fixed top-0 start-0 z-[80] overflow-x-hidden overflow-y-auto pointer-events-none">
+            <form @click="getForm" class="hs-overlay-open:mt-7 hs-overlay-open:opacity-100 hs-overlay-open:duration-500 mt-0 opacity-0 ease-out transition-all sm:max-w-lg sm:w-full m-3 sm:mx-auto min-h-[calc(100%-3.5rem)] flex items-center">
+              <div class="w-full flex flex-col bg-white border shadow-sm rounded-xl pointer-events-auto">
+                <div class="flex justify-between items-center py-3 px-4 border-b">
+                  <h3 class="font-bold text-gray-800">
+                    Enter Form Link
+                  </h3>
+                  <button type="button" class="flex justify-center items-center size-7 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none" data-hs-overlay="#hs-vertically-centered-modal">
+                    <span class="sr-only">Close</span>
+                    <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                      <path d="M18 6 6 18"></path>
+                      <path d="m6 6 12 12"></path>
+                    </svg>
+                  </button>
+                </div>
+                <div class="p-4 overflow-y-auto">
+                  <p class="text-gray-800">
+                    <input required v-model="formLink" type="text" id="input-label" class="py-3 px-4 block  my-3 w-full border-gray-200 rounded-lg text-sm focus:border-blue-500 focus:ring-blue-500 :bg-slate-900 :border-gray-700 :text-gray-400" placeholder="http://localhost/example-form/responses" autofocus>
+                  </p>
+                </div>
+                <div class="flex justify-end items-center gap-x-2 py-3 px-4 border-t">
+                  <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-medium rounded-lg border border-gray-200 bg-white text-gray-800 shadow-sm hover:bg-gray-50 disabled:opacity-50 disabled:pointer-events-none" data-hs-overlay="#hs-vertically-centered-modal">
+                    Close
+                  </button>
+                  <button type="button" class="py-2 px-3 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-blue-600 text-white hover:bg-blue-700 disabled:opacity-50 disabled:pointer-events-none">
+                    Submit Link
+                  </button>
+                </div>
+              </div>
+            </form>
+          </div>
+          
         </div>
         <div class="flex flex-col">
         <div class="-m-1.5 overflow-x-auto">
@@ -64,7 +104,7 @@
                   <tr>
                     <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">No</th>
                     <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Name</th>
-                    <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Description</th>
+                    <th scope="col" class="px-6 py-3 text-start text-xs font-medium text-gray-500 uppercase">Link</th>
                     <th scope="col" class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Action</th>
                   </tr>
                 </thead>
@@ -72,7 +112,7 @@
                   <tr v-for="(form, index) in forms" :key="form.id">
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 :text-gray-200">{{ index+1 }}</td>
                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800 :text-gray-200">{{ form.name }}</td>
-                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 :text-gray-200">{{ form.description }}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-800 :text-gray-200">http://localhost:5173/forms/{{ form.slug }}/responses</td>
                     <td class="px-6 py-4 whitespace-nowrap text-end text-sm font-medium flex gap-2">
                       <button @click="redirectForm(form.slug)" type="button" class="inline-flex items-center bg-blue-200 px-5  py-1 gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none :text-blue-500 :hover:text-blue-400">Show</button>
                       <button type="button" class="inline-flex items-center bg-red-200 px-5  py-1 gap-x-2 text-sm font-semibold rounded-lg border border-transparent text-blue-600 hover:text-blue-800 disabled:opacity-50 disabled:pointer-events-none :text-blue-500 :hover:text-blue-400">Show</button>
@@ -109,9 +149,10 @@ export default {
         description: '',
         allowed_domains: [],
         limit_one_response: 0,
-      }
+      },
+      formLink: '',
     };
-  },
+  }, 
   components: {
     Layout,
   },
@@ -169,6 +210,11 @@ export default {
         icon: 'error',
       });
       }
+    },
+    getForm() {
+      const inputFormLink = this.formLink;
+      console.log({input: inputFormLink});
+      window.location.href = inputFormLink
     },
     redirectForm(slug) {
       router.push(`/forms/${slug}`);

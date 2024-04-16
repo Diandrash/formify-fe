@@ -7,16 +7,13 @@
 
     <div class="w-full flex items-center justify-end ms-auto sm:justify-between sm:gap-x-3 sm:order-3">
 
-      <h1 class="username font-semibold text-base pr-3">{{ username }}</h1>
-
-      <div class="flex flex-row items-center justify-end gap-2">
-        <div class="hs-dropdown relative inline-flex [--placement:bottom-right]">
-          <button id="hs-dropdown-with-header" type="button" class="w-[2.375rem] h-[2.375rem] inline-flex justify-center items-center gap-x-2 text-sm font-semibold rounded-full border border-transparent text-gray-800 hover:bg-gray-100 disabled:opacity-50 disabled:pointer-events-none :text-white :hover:bg-gray-700">
-            <img class="inline-block size-[38px] rounded-full ring-2 ring-white :ring-gray-800 object-cover" src="https://i.stack.imgur.com/l60Hf.png" alt="Image Description">
-          </button>
-
-        </div>
+      <div class="group flex gap-4">
+        <img class="inline-block size-[38px] rounded-full ring-2 ring-white :ring-gray-800 object-cover" src="https://i.stack.imgur.com/l60Hf.png" alt="Image Description">
+        <h1 class="username self-center font-semibold text-base pr-3">{{ username }}</h1>
       </div>
+
+      <button @click.prevent="logout" class="logout text-white bg-red-600 hover:bg-red-800 py-2 px-5 rounded-md font-bold text-sm">Logout</button>
+
     </div>
   </nav>
 </header>
@@ -46,9 +43,9 @@
   <nav class="hs-accordion-group p-6 w-full flex flex-col flex-wrap" data-hs-accordion-always-open>
     <ul class="space-y-1.5">
       <li>
-        <a class="flex items-center gap-x-3.5 py-2 px-2.5 bg-gray-100 text-sm text-slate-700 rounded-lg hover:bg-gray-100 :bg-gray-900 :text-white" href="#">
+        <a class="flex items-center gap-x-3.5 py-2 px-2.5 bg-gray-100 text-sm text-slate-700 rounded-lg hover:bg-gray-100 :bg-gray-900 :text-white" href="/home">
           <svg class="flex-shrink-0 size-4" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" ><path d="m3 9 9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
-          Dashboard
+          Home
         </a>
       </li>
 
@@ -233,8 +230,43 @@ export default {
             console.error('Error fetching forms:', error);
         }
         },
+        async logout() {
+          try {
+            const slug = this.$route.params.slug;
+                    const token = localStorage.getItem('accessToken')
+                    const confirmed = await this.$swal.fire({
+                        title: "Are you sure?",
+                        text: "You won't be able to revert this!",
+                        icon: "warning",
+                        showCancelButton: true,
+                        confirmButtonColor: "#3085d6",
+                        cancelButtonColor: "#d33",
+                        confirmButtonText: "Yes, Logout"
+                    })
+                    if (confirmed.isConfirmed) {
+                            const response = await axios.post('http://localhost:8000/api/v1/auth/logout', null, {
+                            headers: {
+                                'Authorization': `Bearer ${token}`
+                            }
+                        })
+                        localStorage.removeItem('accessToken');
+                        this.$swal({
+                            title: 'Success',
+                            text: `${response.data.message}`,
+                            icon: 'success',
+                        }).then(() => {
+                            localStorage.removeItem('accessToken');
+                            router.push('/login')
+                            console.log({DeleteResponse: response});
+                        })
+                      }
+          } catch (error) {
+            console.log(error);
+          }
+        }
     },
         created() {
+          
         this.fetchUser();
     }
     };
