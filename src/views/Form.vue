@@ -132,7 +132,7 @@
                             <tbody>
                                 <tr v-for="(response, responseIndex) in responsesData" :id="responseIndex" class="odd:bg-white even:bg-gray-100">
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{{ response.user.name }}</td>
-                                    <td v-for="(answer, answerIndex) in response.answers" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{{ answer }}</td>
+                                    <td v-for="(answer, answerIndex) in response.answers" class="px-6 py-4 whitespace-nowrap text-sm font-medium text-gray-800">{{ answer === '*0*' ? '' : answer  }}</td>
                                 </tr>
                             </tbody>
                             </table>

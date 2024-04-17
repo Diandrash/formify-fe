@@ -140,15 +140,16 @@
 
                     this.questionData.forEach(question => {
                         let value = this.responseData[question.name];
-                        if (this.responseData[question.name] !== undefined) {
-                            if (Array.isArray(value)) {
-                                value = value.join(',')
-                            }
-                            answers.push({
+                        if (value  === undefined || value === '' || value === null){
+                            value = '*0*'
+                        } else if (Array.isArray(value)) {
+                            value = value.join(',')
+                        }
+
+                        answers.push({
                                 question_id: question.id,
                                 value
-                            })
-                        }
+                        })
                     })
 
                     const dataToSend = { answers }
@@ -170,7 +171,7 @@
                 } catch (error) {
                     this.$swal({
                         title: 'Failed',
-                        text: `${response.data.message}`,
+                        text: `${error.response.data.message}`,
                         icon: 'error',
                     })
                     console.log(error);
