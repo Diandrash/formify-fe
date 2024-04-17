@@ -47,9 +47,9 @@
                             <label for="textarea-label" class="block text-base font-medium mb-2">{{ question.name }}<span v-if="question.is_required === 1" class="text-red-600 ml-2">*</span></label>
                             <div v-for="(choice, choiceIndex) in question.choices" :key="choiceIndex">
                                 <div class="flex">
-                                    <input v-model="responseData[question.name]" 
+                                    <input 
+                                    :checked="responseData[question.name] && responseData[question.name].includes(choice.label)"
                                     @change="updateCheckbox(question.name, choice.label)"
-                                    :required="question.is_required === 1"
                                     :value="choice.label"  type="checkbox" class="shrink-0 mt-0.5 border-gray-200 rounded text-blue-600 focus:ring-blue-500">
                                     <label class="text-base  ms-3">{{ choice.label }}</label>
                                 </div>
@@ -78,6 +78,7 @@
                 formData: [],
                 questionData: [],
                 responseData: {},
+                accessGranted: false,
             }
         },
         methods: {
@@ -118,9 +119,9 @@
                     
                 }
             },
-            updateCheckbox(questionName, choiceLabel) {
+            updateCheckbox(questionName, choiceLabel){
                 if (!Array.isArray(this.responseData[questionName])) {
-                    this.$set(this.responseData, questionName, []); // Membuat array jika belum ada
+                    this.responseData[questionName] = []
                 }
 
                 const index = this.responseData[questionName].indexOf(choiceLabel);
@@ -128,7 +129,7 @@
                 if (index === -1) {
                     this.responseData[questionName].push(choiceLabel);
                 } else {
-                    this.responseData[questionName].splice(index, 1);
+                    this.responseData[questionName].splice(index, 1)
                 }
             },
             async createResponse() {

@@ -17,7 +17,7 @@
                     <h1 class="font-semibold text-lg">All Questions</h1>
                     <div class="group-button-tight flex gap-3">
                         <button @click.prevent="showResponses" type="button" class="py-2 self-center px-5 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-green-600 text-white hover:bg-green-500">
-                            Responses
+                            Responses ({{ countResponsesData }})
                         </button>
                         <button @click.prevent="createForm" type="button" class="py-2 self-center px-5 inline-flex items-center gap-x-2 text-sm font-semibold rounded-lg border border-transparent bg-violet-600 text-white hover:bg-violet-500">
                             Add Question
@@ -167,7 +167,7 @@
                 formsCreate: [],
                 responsesData: [],
                 answerData: [],
-
+                countResponsesData: 0,
             }
         },
         methods: {
@@ -288,7 +288,9 @@
                         response.answers = Object.values(response.answers);
                     });
                     this.responsesData = responseData;
-                    
+                    const countResponsesData = this.responsesData.length;
+                    this.countResponsesData = countResponsesData;
+                    console.log({count: countResponsesData});
                     console.log({FormResponses: this.responsesData});
                 } catch (error) {
                     
